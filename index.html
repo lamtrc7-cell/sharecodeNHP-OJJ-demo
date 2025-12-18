@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>sharecodeNHP::OJ</title>
+  <style>
+    body {font-family: Arial, sans-serif; background:#f4f6f8; margin:0}
+    header {background:#222; color:#fff; padding:15px; text-align:center}
+    main {max-width:900px; margin:20px auto; background:#fff; padding:20px; border-radius:8px}
+    h2 {margin-top:0}
+    input, textarea, button {width:100%; padding:8px; margin:6px 0}
+    button {background:#007bff; color:#fff; border:none; border-radius:4px; cursor:pointer}
+    button:hover {background:#0056b3}
+    .post {border-bottom:1px solid #ddd; padding:10px 0}
+    .post pre {background:#eee; padding:10px; overflow:auto}
+    .hidden {display:none}
+  </style>
+</head>
+<body>
+<header>
+  <h1>sharecodeNHP::OJ</h1>
+  <p>Nơi chia sẻ code & giải thuật</p>
+</header>
+<main>
+  <section id="auth">
+    <h2>Đăng ký / Đăng nhập</h2>
+    <input id="username" placeholder="Tên người dùng" />
+    <input id="password" type="password" placeholder="Mật khẩu" />
+    <button onclick="login()">Đăng nhập</button>
+  </section>
+
+  <section id="editor" class="hidden">
+    <h2>Đăng bài share code</h2>
+    <input id="title" placeholder="Tiêu đề" />
+    <textarea id="code" rows="6" placeholder="Dán code của bạn vào đây..."></textarea>
+    <button onclick="addPost()">Đăng bài</button>
+  </section>
+
+  <section>
+    <h2>Bài viết</h2>
+    <div id="posts"></div>
+  </section>
+</main>
+
+<script>
+  let currentUser = null;
+  let posts = [];
+
+  function login() {
+    const u = username.value.trim();
+    const p = password.value.trim();
+    if (!u || !p) {
+      alert('Vui lòng nhập đủ thông tin');
+      return;
+    }
+    currentUser = u;
+    auth.classList.add('hidden');
+    editor.classList.remove('hidden');
+    alert('Xin chào ' + u);
+  }
+
+  function addPost() {
+    const t = title.value.trim();
+    const c = code.value.trim();
+    if (!t || !c) return alert('Chưa nhập đủ nội dung');
+    posts.unshift({user: currentUser, title: t, code: c});
+    title.value = '';
+    code.value = '';
+    render();
+  }
+
+  function render() {
+    postsDiv = document.getElementById('posts');
+    postsDiv.innerHTML = '';
+    posts.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'post';
+      div.innerHTML = `<strong>${p.title}</strong> - <em>${p.user}</em><pre>${p.code}</pre>`;
+      postsDiv.appendChild(div);
+    });
+  }
+</script>
+</body>
+</html>
+
